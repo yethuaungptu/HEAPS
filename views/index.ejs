@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <link rel="stylesheet" href="/stylesheets/swiper-bundle.min.css" />
+    <script src="/javascripts/swiper-bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ./partial/navbar.ejs %>
+    <div class="carousel w-full h-[50vh] lg:h-[80vh]">
+      <div id="slide1" class="carousel-item relative w-full">
+        <img src="/images/slider-1-1.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
+            Future University
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
+            This future university will help your way
+          </p>
+          <a href="/university" class="btn btn-primary">Check University</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+
+      <!-- Repeat for other slides with different text -->
+      <div id="slide2" class="carousel-item relative w-full">
+        <img src="/images/slider-2.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md text-info">
+            Question for your skill
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md text-primary">
+            Can check your skill with question
+          </p>
+          <a href="/questions" class="btn btn-primary">Check Question</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+      <div id="slide3" class="carousel-item relative w-full">
+        <img src="/images/slider-3.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md text-info">
+            Result With AI Prediction
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md text-primary">
+            Final result will include which university can join
+          </p>
+          <a href="/user" class="btn btn-primary">Explore User Dashboard</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="aos-all">
+      <div class="swiper" data-aos="fade-up">
+        <!-- Additional required wrapper -->
+        <div class="text-center bg-base-200 text-3xl lg:text-5xl font-semibold">
+          Top University
+        </div>
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+          <div class="swiper-slide">
+            <div class="hero bg-base-200 h-[50vh]">
+              <div class="hero-content flex-col lg:flex-row">
+                <img
+                  src="https://edurank.org/assets/img/uni-logos/university-of-computer-studies-yangon-logo.jpg"
+                  class="max-w-sm rounded-lg shadow-2xl"
+                />
+                <div>
+                  <h1 class="text-xl lg:text-5xl font-bold">
+                    University of Computer Studies Yangon
+                  </h1>
+                  <p class="py-6">
+                    A leading institution for computer science and related
+                    fields
+                  </p>
+                  <button class="btn btn-primary">See More</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="hero bg-base-200 h-[50vh]">
+              <div class="hero-content flex-col lg:flex-row">
+                <img
+                  src="https://edurank.org/assets/img/uni-logos/university-of-medicine-mandalay-logo.png"
+                  class="max-w-sm rounded-lg shadow-2xl"
+                />
+                <div>
+                  <h1 class="text-xl lg:text-5xl font-bold">
+                    University of Medicine, Mandalay
+                  </h1>
+                  <p class="py-6">
+                    A leading institution for medicine and related fields
+                  </p>
+                  <button class="btn btn-primary">Get Started</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="hero bg-base-200 h-[50vh]">
+              <div class="hero-content flex-col lg:flex-row">
+                <img
+                  src="data:image/png;base64,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"
+                  class="max-w-sm rounded-lg shadow-2xl"
+                />
+                <div>
+                  <h1 class="text-xl lg:text-5xl font-bold">
+                    Yangon Technological University
+                  </h1>
+                  <p class="py-6">
+                    YTU is the country's oldest and largest engineering
+                    university, and the best engineering university in Myanmar.
+                  </p>
+                  <button class="btn btn-primary">Get Started</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          ...
+        </div>
+        <!-- If we need pagination -->
+        <!-- <div class="swiper-pagination"></div> -->
+
+        <!-- If we need navigation buttons -->
+        <!-- <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div> -->
+
+        <!-- If we need scrollbar -->
+        <!-- <div class="swiper-scrollbar"></div> -->
+      </div>
+      <div class="swiper2 mt-2" data-aos="fade-up">
+        <!-- Additional required wrapper -->
+        <div
+          class="text-center bg-blue-200 text-3xl lg:text-5xl font-thin italic"
+        >
+          User Feedback
+        </div>
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+          <div class="swiper-slide">
+            <div class="hero bg-blue-200 h-[50vh]">
+              <blockquote
+                class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
+              >
+                <p class="text-lg italic text-gray-700">
+                  "Education is the most powerful weapon which you can use to
+                  change the world."
+                </p>
+                <footer class="mt-4 text-sm text-gray-500 text-right">
+                  — Nelson Mandela
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="hero bg-blue-200 h-[50vh]">
+              <blockquote
+                class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
+              >
+                <p class="text-lg italic text-gray-700">
+                  "Education is the most powerful weapon which you can use to
+                  change the world."
+                </p>
+                <footer class="mt-4 text-sm text-gray-500 text-right">
+                  — Nelson Mandela
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="hero bg-blue-200 h-[50vh]">
+              <blockquote
+                class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
+              >
+                <p class="text-lg italic text-gray-700">
+                  "Education is the most powerful weapon which you can use to
+                  change the world."
+                </p>
+                <footer class="mt-4 text-sm text-gray-500 text-right">
+                  — Nelson Mandela
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+          ...
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination2"></div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+    const swiper = new Swiper(".swiper", {
+      // Optional parameters
+      direction: "horizontal",
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+      },
+      autoplay: {
+        delay: 5000,
+      },
+    });
+
+    const swiper2 = new Swiper(".swiper2", {
+      // Optional parameters
+      direction: "horizontal",
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+      },
+      autoplay: {
+        delay: 3000,
+      },
+      scrollbar: {
+        el: ".swiper-scrollbar",
+      },
+    });
+  </script>
+</html>
