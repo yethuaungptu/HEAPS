@@ -33,14 +33,28 @@
                     d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
                   ></path>
                 </svg>
-                Login account
+                Create new account
               </div>
             </div>
           </div>
         </div>
         <div class="card-body gap-4">
-          <p class="text-sm opacity-60">Login to access user panel</p>
-          <form action="/login" method="post" id="frm">
+          <p class="text-sm opacity-60">
+            Registration is free and only takes a minute
+          </p>
+          <form action="/register" method="post" id="frm">
+            <label class="label">Name</label>
+            <input
+              type="text"
+              class="input validator"
+              required
+              placeholder="Name"
+              pattern="[A-Za-z][A-Za-z\- ]*"
+              minlength="3"
+              maxlength="30"
+              title="Only letters"
+            />
+            <p class="validator-hint -my-1">Must be 3 to 30 characters</p>
             <label class="label">Email</label>
             <input
               type="email"
@@ -65,8 +79,8 @@
             </p>
 
             <div class="card-actions items-center gap-6">
-              <button type="submit" class="btn btn-primary">Login</button>
-              <a href="/register">Don't have account? Register here</a>
+              <button type="submit" class="btn btn-primary">Register</button>
+              <a href="/login">Already have account? Login here</a>
             </div>
           </form>
         </div>
@@ -79,18 +93,19 @@
     $(function () {
       $("#frm").submit(function (e) {
         e.preventDefault();
-        const email = $(".input").eq(0).val();
-        const password = $(".input").eq(1).val();
+        const name = $(".input").eq(0).val();
+        const email = $(".input").eq(1).val();
+        const password = $(".input").eq(2).val();
 
-        const data = { email, password };
-        $.ajax("/login", {
+        const data = { name, email, password };
+        $.ajax("/register", {
           type: "POST",
           data: data,
           success: function (result) {
             if (result.status == false) {
               alert(result.message);
             } else {
-              location.href = "/users";
+              location.href = "/login";
             }
           },
         });

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="">
+    <% include ./partial/navbar.ejs %>
+    <div class="text-3xl text-center my-9 text-primary">University Detail</div>
+    <div
+      class="aos-all flex items-center justify-center mx-2 my-9 lg:my-24"
+      data-aos="fade-up"
+    >
+      <div
+        class="card lg:card-side w-full lg:w-3/4 bg-base-100 shadow-sm m-2 center"
+      >
+        <figure>
+          <img src="<%= university.image %>" alt="Album" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title"><%= university.name %></h2>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Category</h2>
+                <p><%= university.category %></p>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Address</h2>
+                <p><%= university.address %></p>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Ranking</h2>
+                <p><%= university.ranking %></p>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Mini Score</h2>
+                <p><%= university.minScore %></p>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Region</h2>
+                <p><%= university.region %></p>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-full shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">Website URL</h2>
+                <p><%= university.websiteUrl %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>
