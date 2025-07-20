@@ -25,8 +25,8 @@ router.get("/university/:id", async function (req, res) {
   res.render("universityDetail", { university: university });
 });
 
-router.get("/question", function (req, res) {
-  res.render("question");
+router.get("/exam", function (req, res) {
+  res.render("exam");
 });
 
 router.get("/feedback", function (req, res) {

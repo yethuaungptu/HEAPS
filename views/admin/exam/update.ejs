@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
+            <div class="text-xl font-semibold">Exam Update</div>
+            <div class="divider mt-2"></div>
+            <div class="h-full w-full pb-6 bg-base-100">
+              <form action="/admin/exam/update" method="post">
+                <input type="hidden" name="id" value="<%= exam._id %>" />
+                <input type="hidden" id="catVal" value="<%= exam.category %>" />
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Title
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Question"
+                      class="input input-bordered w-full validator"
+                      required
+                      minlength="3"
+                      value="<%= exam.title %>"
+                      title="Only letters, numbers or dash"
+                    />
+                    <p class="validator-hint">Must be at least 3 characters</p>
+                  </div>
+
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Total Mark
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      name="totalMarks"
+                      placeholder="Marks"
+                      class="input input-bordered w-full validator"
+                      value="<%= exam.totalMarks %>"
+                      required
+                      min="1"
+                      max="100"
+                      title="Only numbers"
+                    />
+                    <p class="validator-hint">
+                      Total Mark is required, Min 1 and Max 100
+                    </p>
+                  </div>
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Duration Minutes
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      name="durationMinutes"
+                      placeholder="Duration Minutes"
+                      class="input input-bordered w-full validator"
+                      required
+                      value="<%= exam.durationMinutes %>"
+                      min="1"
+                      max="100"
+                      title="Only numbers"
+                    />
+                    <p class="validator-hint">
+                      Duration Minutes is required, Min 1 and Max 100
+                    </p>
+                  </div>
+
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Category
+                      </span>
+                    </label>
+                    <br />
+                    <select
+                      class="select select-bordered validator w-full h-[10vh]"
+                      name="category"
+                      id="category"
+                      required
+                      multiple
+                    >
+                      <option value="University">University</option>
+                      <option value="Computer University">
+                        Computer University
+                      </option>
+                      <option value="Technological University">
+                        Technological University
+                      </option>
+                      <option value="Medicine University">
+                        Medicine University
+                      </option>
+                      <option value="Agricultural University">
+                        Agricultural University
+                      </option>
+                      <option value="University of Culture">
+                        University of Culture
+                      </option>
+                      <option value="University of Traditional Medicine">
+                        University of Traditional Medicine
+                      </option>
+                      <option value="Institute of Economics">
+                        Institute of Economics
+                      </option>
+                      <option value="Institute of Nursing">
+                        Institute of Nursing
+                      </option>
+                      <option value="Education College">
+                        Education College
+                      </option>
+                      <option value="University of Foreign Languages">
+                        University of Foreign Languages
+                      </option>
+                    </select>
+                    <p class="validator-hint">Question Type is required</p>
+                  </div>
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Description
+                      </span>
+                    </label>
+                    <textarea
+                      name="description"
+                      class="textarea textarea-bordered w-full"
+                      placeholder="Description"
+                    >
+<%= exam.description %></textarea
+                    >
+                  </div>
+                </div>
+                <div class="divider"></div>
+                <br />
+                <div class="mt-6">
+                  <button type="submit" class="btn btn-primary float-right">
+                    Update
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <% include ../../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      $("#category").val($("#catVal").val().split(","));
+    });
+  </script>
+</html>

@@ -22,12 +22,20 @@ const ExamSchema = new Schema({
     type: Number,
     default: 30,
   },
-  tags: [String], // e.g. ['biology', 'midterm']
+  category: [String], // e.g. ['biology', 'midterm']
+  isDelete: {
+    type: Boolean,
+    default: false,
+  },
   isPublished: {
     type: Boolean,
     default: false,
   },
   created: {
+    type: Date,
+    default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+  },
+  updated: {
     type: Date,
     default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
   },
