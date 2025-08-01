@@ -1,4 +1,4 @@
-<div class="navbar bg-primary text-primary-content shadow-sm">
+<div class="sticky top-0 z-11 navbar bg-primary text-primary-content shadow-sm">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -25,10 +25,14 @@
         <li><a href="/">Home</a></li>
         <li><a href="/university">University</a></li>
         <li><a href="/exam">Exam</a></li>
+        <li><a href="/quiz">Quiz</a></li>
         <li><a href="/feedback">Feedback</a></li>
         <li><a href="/aboutus">About Us</a></li>
+        <% if(locals.user){%>
+        <li><a href="/user">User Panel</a></li>
+        <%}%>
       </ul>
-      <a class="btn btn-ghost btn-primary text-xl hidden lg:flex"
+      <a class="btn btn-ghost btn-primary text-2xl hidden lg:flex"
         >Higher Eduction Access Prediction System</a
       >
     </div>
@@ -38,13 +42,21 @@
       <li><a href="/">Home</a></li>
       <li><a href="/university">University</a></li>
       <li><a href="/exam">Exam</a></li>
+      <li><a href="/quiz">Quiz</a></li>
       <li><a href="/feedback">Feedback</a></li>
       <li><a href="/aboutus">About Us</a></li>
+      <% if(locals.user){%>
+      <li><a href="/user">User Panel</a></li>
+      <%}%>
     </ul>
   </div>
   <div class="navbar-end">
-    <a href="/login" class="btn btn-outline btn-ghost btn-primary"
-      >Login / Register</a
-    >
+    <% if(locals.user){%>
+    <a href="/logout" class="btn btn-outline btn-ghost btn-primary"> Logout </a>
+    <%}else{%>
+    <a href="/login" class="btn btn-outline btn-ghost btn-primary">
+      Login / Register
+    </a>
+    <%}%>
   </div>
 </div>

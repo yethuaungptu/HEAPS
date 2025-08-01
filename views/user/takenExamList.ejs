@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+
+    <div class="p-6 space-y-4 mt-3">
+      <h2 class="text-2xl font-bold text-center">📘 My Taken Exam List</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% history.takenExam.forEach((exam) => { %>
+        <div class="card bg-base-100 shadow-md border border-gray-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg font-semibold text-primary">
+              <%= exam.examId.title %> <% if (exam.examId.isPublished) { %>
+              <span class="badge badge-success text-xs ml-2">Published</span>
+              <% } else { %>
+              <span class="badge badge-warning text-xs ml-2">Draft</span>
+              <% } %>
+            </h3>
+
+            <% if (exam.examId.description) { %>
+            <p class="text-sm text-gray-600 mt-1">
+              <%= exam.examId.description %>
+            </p>
+            <% } %>
+
+            <div class="mt-2 space-y-1 text-sm">
+              <p><strong>📝 Marks:</strong> <%= exam.examId.totalMarks %></p>
+              <p>
+                <strong>⏱ Duration:</strong> <%= exam.examId.durationMinutes %>
+                mins
+              </p>
+              <p>
+                <strong>🏷 Target University:</strong>
+                <%= exam.examId.category.join(", ") %>
+              </p>
+            </div>
+            <% if(exam.examId.isPublished){%>
+            <div class="card-actions mt-4 justify-end">
+              <a
+                href="/user/exam/<%= exam.examId._id %>"
+                class="btn btn-sm btn-outline btn-primary"
+              >
+                View
+              </a>
+            </div>
+            <%}%>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

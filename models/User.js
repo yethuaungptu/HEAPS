@@ -12,6 +12,34 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  score: {
+    type: Number,
+    default: 0,
+  },
+  takenExam: [
+    {
+      examId: {
+        type: Schema.Types.ObjectId,
+        ref: "Exam",
+      },
+      joined: {
+        type: Date,
+        default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+      },
+    },
+  ],
+  takenQuiz: [
+    {
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "Quiz",
+      },
+      joined: {
+        type: Date,
+        default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+      },
+    },
+  ],
   password: {
     type: String,
     required: true,

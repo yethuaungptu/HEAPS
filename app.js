@@ -34,8 +34,14 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.locals.user = req.session.user;
+  res.locals.admin = req.session.admin;
+  next();
+});
+
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/user", usersRouter);
 app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler

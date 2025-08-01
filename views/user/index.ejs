@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <!-- <div class="aos-all"> -->
+    <div class="text-3xl text-center mt-3 text-primary">My Profile</div>
+    <div class="container mx-auto px-4 py-6">
+      <!-- Profile Card -->
+      <div class="card bg-base-100 shadow-xl border border-gray-200">
+        <div class="card-body">
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-6"
+          >
+            <!-- Avatar -->
+            <div class="avatar">
+              <div
+                class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+              >
+                <img
+                  src="https://avatar.iran.liara.run/public"
+                  alt="User Avatar"
+                />
+              </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="flex-1">
+              <h2 class="text-2xl font-bold"><%= user.name %></h2>
+              <p class="text-gray-500">Email: <%= user.email %></p>
+              <!-- <p class="text-gray-500">Score: <%= user.score %></p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="stat bg-base-200 rounded-lg">
+          <div class="stat-title">Exams Taken</div>
+          <div class="stat-value text-primary">
+            <%= user.takenExam.length %>
+          </div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg">
+          <div class="stat-title">Quizzes Completed</div>
+          <div class="stat-value text-secondary">
+            <%= user.takenQuiz.length %>
+          </div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg">
+          <div class="stat-title">Average Score</div>
+          <div class="stat-value text-accent">-</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="mt-6">
+          <h3 class="text-xl font-semibold mb-2">📋 Recent Exams</h3>
+          <ul class="menu bg-base-100 rounded-box shadow-md w-full">
+            <li><a>Biology Midterm - 85%</a></li>
+            <li><a>Math Quiz - 92%</a></li>
+            <li><a>English Final - 78%</a></li>
+          </ul>
+        </div>
+        <div class="mt-6">
+          <h3 class="text-xl font-semibold mb-2">📋 Recent quiz</h3>
+          <ul class="menu bg-base-100 rounded-box shadow-md w-full">
+            <li><a>Biology Midterm - 85%</a></li>
+            <li><a>Math Quiz - 92%</a></li>
+            <li><a>English Final - 78%</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- </div> -->
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require("../models/User");
 var University = require("../models/University");
+var Exam = require("../models/Exam");
 // const { CohereClient } = require("cohere-ai");
 // require("dotenv").config();
 
@@ -25,8 +26,13 @@ router.get("/university/:id", async function (req, res) {
   res.render("universityDetail", { university: university });
 });
 
-router.get("/exam", function (req, res) {
-  res.render("exam");
+router.get("/exam", async function (req, res) {
+  const exams = await Exam.find({ isDelete: false });
+  res.render("exam", { exams: exams });
+});
+
+router.get("/quiz", function (req, res) {
+  res.render("quiz");
 });
 
 router.get("/feedback", function (req, res) {
@@ -80,6 +86,11 @@ router.post("/login", async (req, res) => {
 
 router.get("/aboutus", function (req, res) {
   res.render("aboutus");
+});
+
+router.get("/logout", function (req, res) {
+  req.session.destroy();
+  res.redirect("/");
 });
 
 // router.get("/test", async (req, res) => {

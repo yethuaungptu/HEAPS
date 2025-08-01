@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <!-- <div class="aos-all"> -->
+    <div
+      id="notification"
+      class="fixed top-35 right-5 text-white px-4 py-2 rounded shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none"
+    >
+      ✅ Notification message here!
+    </div>
+    <div class="max-w-3xl mx-auto p-6">
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-primary">📝 <%= exam.title %></h1>
+        <p class="text-gray-500">
+          Answer carefully. You have <span id="timer">00:00</span>
+        </p>
+      </div>
+      <input type="hidden" id="duration" value="<%= exam.durationMinutes %>" />
+      <form
+        action="/user/exam/taken"
+        method="post"
+        id="exam-form"
+        class="space-y-6"
+      >
+        <input type="hidden" name="examId" value="<%= exam._id %>" />
+        <input type="hidden" name="duration" id="durationFinal" />
+        <% for(var i = 0; i < exam.questions.length; i++){%> <%
+        if(exam.questions[i].type == "multiple_choice"){%>
+        <div
+          class="question-block p-4 bg-white shadow-md rounded"
+          id="q<%= i+1 %>-block"
+        >
+          <p class="font-semibold mb-2">
+            <%= i+1 %>. <%= exam.questions[i].question %>
+          </p>
+          <div class="form-control flex justify-around">
+            <% for(var j = 0; j < exam.questions[i].choices.length;j++){%>
+            <label class="label cursor-pointer">
+              <input
+                type="radio"
+                name="q<%=i+1%>"
+                value="<%= exam.questions[i].choices[j] %>"
+                class="radio checked:bg-blue-500"
+              />
+              <span class="label-text ml-2"
+                ><%= exam.questions[i].choices[j] %></span
+              >
+            </label>
+            <%}%>
+          </div>
+        </div>
+        <%}%> <% if(exam.questions[i].type == "fill_in_blank"){%>
+        <div
+          class="question-block p-4 bg-white shadow-md rounded"
+          id="q<%= i+1 %>-block"
+        >
+          <p class="font-semibold mb-2">
+            <%= i+1 %>. <%= exam.questions[i].question %>
+          </p>
+          <input
+            type="text"
+            name="q<%=i+1%>"
+            placeholder="Your answer..."
+            class="input input-bordered w-full"
+          />
+        </div>
+        <%}%> <% if(exam.questions[i].type == "paragraph"){%>
+        <div
+          class="question-block p-4 bg-white shadow-md rounded"
+          id="q<%= i+1 %>-block"
+        >
+          <p class="font-semibold mb-2">
+            <%= i+1 %>. <%= exam.questions[i].question %>
+          </p>
+          <textarea
+            name="q<%= i+1 %>"
+            rows="4"
+            class="textarea textarea-bordered w-full"
+            placeholder="Write your answer..."
+          ></textarea>
+        </div>
+        <%}%> <%}%>
+        <!-- Submit -->
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Submit Exam</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- </div> -->
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    // Timer
+    function showNotification(type, message) {
+      let bgColor;
+      if (type == "success") {
+        bgColor = "bg-green-500";
+      } else {
+        bgColor = "bg-red-500";
+      }
+      const notif = document.getElementById("notification");
+
+      notif.classList.remove("opacity-0", "pointer-events-none");
+      notif.classList.add("opacity-100");
+      notif.classList.add(bgColor);
+      $("#notification").text(message);
+      setTimeout(() => {
+        notif.classList.remove("opacity-100");
+        notif.classList.add("opacity-0", "pointer-events-none");
+        notif.classList.remove(bgColor);
+      }, 3000);
+    }
+    console.log($("#duration").val());
+    let duration = $("#duration").val() * 60;
+    const timerEl = document.getElementById("timer");
+    const interval = setInterval(() => {
+      const min = Math.floor(duration / 60);
+      const sec = duration % 60;
+      timerEl.textContent = `${String(min).padStart(2, "0")}:${String(
+        sec
+      ).padStart(2, "0")}`;
+      if (--duration < 0) {
+        clearInterval(interval);
+        alert("⏰ Time is up! Auto-submitting.");
+        document.getElementById("exam-form").submit();
+      }
+    }, 1000);
+
+    // document.getElementById("exam-form").addEventListener("submit", (e) => {
+    //   $("#durationFinal").val(duration);
+    //   e.preventDefault();
+    //   alert("✅ Answers submitted!");
+    //   $("#exam-form").submit();
+    //   // Send data to backend here
+    // });
+
+    $("#exam-form").submit(function (event) {
+      $("#durationFinal").val($("#duration").val() * 60 - duration);
+      event.preventDefault(); // Prevent default form submission
+      // alert("✅ Answers submitted!");
+      showNotification("success", "Answers Submitted");
+      var formData = $(this).serialize(); // Serialize form data
+      $.ajax({
+        url: "/user/exam/taken",
+        type: "POST",
+        data: formData, // Send serialized data
+        success: function (result) {
+          if (result.status) {
+            showNotification("success", "Result is calculated");
+            setTimeout(() => {
+              location.href = "/user";
+            }, "2000");
+          } else {
+            showNotification("error", result.message);
+          }
+        },
+        error: function (error) {
+          console.error("Error:", error);
+        },
+      });
+    });
+  </script>
+</html>
