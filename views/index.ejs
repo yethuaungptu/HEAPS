@@ -13,18 +13,18 @@
     <% include ./partial/navbar.ejs %>
     <div class="carousel w-full h-[50vh] lg:h-[80vh]">
       <div id="slide1" class="carousel-item relative w-full">
-        <img src="/images/slider-1-1.jpg" class="w-full object-cover" />
+        <img src="/images/slider-1-2.jpg" class="w-full object-cover" />
         <div
           class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
         >
           <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
-            Future University
+            Higher Eduction Access Prediction System
           </h2>
           <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
             This future university will help your way
           </p>
           <%if(locals.user){%>
-          <a href="/university" class="btn btn-primary">Check University</a>
+          <a href="/university" class="btn btn-primary"> University List</a>
           <%}%>
         </div>
         <div
