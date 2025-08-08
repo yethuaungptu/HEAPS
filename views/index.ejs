@@ -180,53 +180,22 @@
           User Feedback
         </div>
         <div class="swiper-wrapper">
-          <!-- Slides -->
+          <% for(var i = 0; i < feedback.length;i++){%>
           <div class="swiper-slide">
             <div class="hero bg-blue-200 h-[50vh]">
               <blockquote
                 class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
               >
                 <p class="text-lg italic text-gray-700">
-                  "Education is the most powerful weapon which you can use to
-                  change the world."
+                  "<%= feedback[i].feedbackText %>"
                 </p>
                 <footer class="mt-4 text-sm text-gray-500 text-right">
-                  — Nelson Mandela
+                  — <%= feedback[i].user.name %>
                 </footer>
               </blockquote>
             </div>
           </div>
-          <div class="swiper-slide">
-            <div class="hero bg-blue-200 h-[50vh]">
-              <blockquote
-                class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
-              >
-                <p class="text-lg italic text-gray-700">
-                  "Education is the most powerful weapon which you can use to
-                  change the world."
-                </p>
-                <footer class="mt-4 text-sm text-gray-500 text-right">
-                  — Nelson Mandela
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="hero bg-blue-200 h-[50vh]">
-              <blockquote
-                class="p-6 border-l-4 border-primary bg-base-100 shadow-md rounded-lg"
-              >
-                <p class="text-lg italic text-gray-700">
-                  "Education is the most powerful weapon which you can use to
-                  change the world."
-                </p>
-                <footer class="mt-4 text-sm text-gray-500 text-right">
-                  — Nelson Mandela
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-          ...
+          <%}%>
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination2"></div>

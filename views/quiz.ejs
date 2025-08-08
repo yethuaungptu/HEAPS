@@ -9,9 +9,58 @@
   </head>
   <body>
     <% include ./partial/navbar.ejs %>
-    <!-- <div class="aos-all"> -->
-    <div class="text-3xl text-center mt-3 text-primary">Quiz List</div>
-    <!-- </div> -->
+    <div class="aos-all">
+      <div class="p-6 space-y-4 mt-3">
+        <h2 class="text-2xl font-bold text-center">📘 Quiz List</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% quiz.forEach((item) => { %>
+          <div class="card bg-base-100 shadow-md border border-gray-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg font-semibold text-primary">
+                <%= item.title %> <% if (item.isPublished) { %>
+                <span class="badge badge-success text-xs ml-2">Published</span>
+                <% } else { %>
+                <span class="badge badge-warning text-xs ml-2">Draft</span>
+                <% } %>
+              </h3>
+
+              <% if (item.description) { %>
+              <p class="text-sm text-gray-600 mt-1"><%= item.description %></p>
+              <% } %>
+
+              <div class="mt-2 space-y-1 text-sm">
+                <p><strong>📝 Marks:</strong> <%= item.mark %></p>
+                <p>
+                  <strong>⏱ Duration:</strong> <%= item.durationMinutes %> mins
+                </p>
+                <p>
+                  <strong>🏷 Target University:</strong>
+                  <%= item.category.join(", ") %>
+                </p>
+              </div>
+              <% if(item.isPublished){%>
+              <div class="card-actions mt-4 justify-end">
+                <% if(locals.user){%>
+                <a
+                  href="/user/quiz/<%= item._id %>"
+                  class="btn btn-sm btn-outline btn-primary"
+                >
+                  View
+                </a>
+                <%}else{%>
+                <a href="/login" class="btn btn-sm btn-outline btn-accent">
+                  Login to accept
+                </a>
+                <%}%>
+              </div>
+              <%}%>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>

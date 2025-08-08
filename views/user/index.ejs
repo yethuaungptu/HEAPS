@@ -55,8 +55,10 @@
           </div>
         </div>
         <div class="stat bg-base-200 rounded-lg">
-          <div class="stat-title">Average Score</div>
-          <div class="stat-value text-accent">-</div>
+          <div class="stat-title">Total Practice</div>
+          <div class="stat-value text-accent">
+            <%= user.takenExam.length + user.takenQuiz.length %>
+          </div>
         </div>
       </div>
 
@@ -65,17 +67,25 @@
         <div class="mt-6">
           <h3 class="text-xl font-semibold mb-2">📋 Recent Exams</h3>
           <ul class="menu bg-base-100 rounded-box shadow-md w-full">
-            <li><a>Biology Midterm - 85%</a></li>
-            <li><a>Math Quiz - 92%</a></li>
-            <li><a>English Final - 78%</a></li>
+            <% for(var i = 0; i < recentExam.length;i++){%>
+            <li>
+              <a href="/user/exam/<%= recentExam[i]._id %>"
+                ><%= recentExam[i].title %> - <%= recentExam[i].totalMarks %></a
+              >
+            </li>
+            <%}%>
           </ul>
         </div>
         <div class="mt-6">
           <h3 class="text-xl font-semibold mb-2">📋 Recent quiz</h3>
           <ul class="menu bg-base-100 rounded-box shadow-md w-full">
-            <li><a>Biology Midterm - 85%</a></li>
-            <li><a>Math Quiz - 92%</a></li>
-            <li><a>English Final - 78%</a></li>
+            <% for(var i = 0; i < recentQuiz.length;i++){%>
+            <li>
+              <a href="/user/quiz/<%= recentQuiz[i]._id %>"
+                ><%= recentQuiz[i].title %> - <%= recentQuiz[i].mark %></a
+              >
+            </li>
+            <%}%>
           </ul>
         </div>
       </div>

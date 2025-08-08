@@ -1,8 +1,11 @@
 var express = require("express");
 var router = express.Router();
 const Exam = require("../models/Exam");
+const Quiz = require("../models/Quiz");
 const User = require("../models/User");
 const TakeExam = require("../models/TakeExam");
+const TakeQuiz = require("../models/TakeQuiz");
+const Feedback = require("../models/Feedback");
 var moment = require("moment-timezone");
 const { CohereClient } = require("cohere-ai");
 require("dotenv").config();
@@ -45,10 +48,46 @@ Give a only score array for each value with question no and max is 1 mark for ea
   }
 };
 
+const checkQuiz = async function (question, correctAnswer, studentAnswer) {
+  const prompt = `
+You are an quiz grader.
+Question : ${question}
+Correct Answer : ${correctAnswer}
+Student Answer : ${studentAnswer}
+
+Give a only score object and max is 1 mark and result like{result:1}.If result is 0, add remark for why and his answer.
+`;
+  console.log(prompt);
+  try {
+    const response = await cohere.chat({
+      model: "command-r",
+      message: prompt,
+      temperature: 0.3,
+    });
+
+    const aiFeedback = response.text.trim();
+    console.log(typeof response.text, response.text);
+    return { data: aiFeedback, status: true };
+  } catch (error) {
+    console.error("Cohere API error:", error);
+    return { message: error, status: false };
+  }
+};
+
 /* GET users listing. */
 router.get("/", checkUser, async function (req, res, next) {
   const user = await User.findById(req.session.user.id);
-  res.render("user/index", { user: user });
+  const recentExam = await Exam.find({ isDelete: false })
+    .sort({ created: -1 })
+    .limit(3);
+  const recentQuiz = await Quiz.find({ isDelete: false })
+    .sort({ created: -1 })
+    .limit(3);
+  res.render("user/index", {
+    user: user,
+    recentExam: recentExam,
+    recentQuiz: recentQuiz,
+  });
 });
 
 router.get("/exam/:id", checkUser, async function (req, res) {
@@ -61,10 +100,25 @@ router.get("/exam/:id", checkUser, async function (req, res) {
   res.render("user/exam", { exam: exam, isDone: isDone });
 });
 
+router.get("/quiz/:id", checkUser, async function (req, res) {
+  const quiz = await Quiz.findById(req.params.id);
+  const user = await User.findById(req.session.user.id);
+  const isDone = user.takenQuiz.some(
+    (quiz) => quiz.id.toString() === req.params.id
+  );
+  console.log(isDone);
+  res.render("user/quiz", { quiz: quiz, isDone: isDone });
+});
+
 //need push takenExam at user and already taken redirect to profile page
 router.get("/exam/taken/:id", checkUser, async function (req, res) {
   const exam = await Exam.findById(req.params.id).populate("questions");
   res.render("user/answerExam", { exam: exam });
+});
+
+router.get("/quiz/taken/:id", checkUser, async function (req, res) {
+  const quiz = await Quiz.findById(req.params.id).populate("question");
+  res.render("user/answerQuiz", { quiz: quiz });
 });
 
 router.post("/exam/taken", checkUser, async function (req, res) {
@@ -135,6 +189,57 @@ router.post("/exam/taken", checkUser, async function (req, res) {
   }
 });
 
+router.post("/quiz/taken", checkUser, async function (req, res) {
+  try {
+    const takeQuiz = new TakeQuiz();
+    const duration =
+      Math.floor(Number(req.body.duration) / 60) +
+      " Mins : " +
+      (Number(req.body.duration) % 60) +
+      " Sec";
+
+    const quizData = await Quiz.findById(req.body.quizId).populate("question");
+
+    takeQuiz.user = req.session.user.id;
+    takeQuiz.quiz = req.body.quizId;
+    takeQuiz.quizMark = quizData.mark;
+    takeQuiz.durationTaken = duration;
+
+    const result = await checkQuiz(
+      quizData.question.question,
+      quizData.question.correctAnswer,
+      req.body.answer
+    );
+    if (result.status) {
+      const modRes = result.data.replace(/(\w+):/g, '"$1":');
+      const resData = JSON.parse(modRes);
+      const finalAnswer = {
+        question: quizData.question._id,
+        answer: req.body.answer,
+        score: resData.result,
+        remark: resData.remark ? resData.remark : "",
+        mark: quizData.question.marks * resData.result,
+      };
+      takeQuiz.answer = finalAnswer;
+      await takeQuiz.save();
+      await User.findByIdAndUpdate(req.session.user.id, {
+        $push: {
+          takenQuiz: {
+            id: req.body.quizId,
+            joined: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+          },
+        },
+      });
+      res.json({ status: true });
+    } else {
+      res.json({ status: false, message: result.message });
+    }
+  } catch (e) {
+    console.log(e);
+    res.json({ status: false, message: e });
+  }
+});
+
 router.get("/exam/result/:id", checkUser, async function (req, res) {
   try {
     const history = await TakeExam.findOne({
@@ -150,12 +255,48 @@ router.get("/exam/result/:id", checkUser, async function (req, res) {
   }
 });
 
+router.get("/quiz/result/:id", checkUser, async function (req, res) {
+  try {
+    const history = await TakeQuiz.findOne({
+      quiz: req.params.id,
+      user: req.session.user.id,
+    })
+      .populate("quiz")
+      .populate("answer.question");
+    if (history) res.render("user/quizResult", { history: history });
+    else res.redirect("/user");
+  } catch (e) {
+    res.redirect("/user");
+  }
+});
+
 router.get("/myExam/history", checkUser, async function (req, res) {
   const history = await User.findById(req.session.user.id).populate(
     "takenExam.examId"
   );
   console.log(history);
   res.render("user/takenExamList", { history: history });
+});
+
+router.get("/myQuiz/history", checkUser, async function (req, res) {
+  const history = await User.findById(req.session.user.id).populate(
+    "takenQuiz.id"
+  );
+  console.log(history);
+  res.render("user/takenQuizList", { history: history });
+});
+
+router.post("/feedback", checkUser, async function (req, res) {
+  try {
+    const feedback = new Feedback();
+    feedback.user = req.session.user.id;
+    feedback.rating = req.body.rating ? req.body.rating : 3;
+    feedback.feedbackText = req.body.feedbackText;
+    await feedback.save();
+    res.redirect("/feedback");
+  } catch (e) {
+    res.redirect("/feedback");
+  }
 });
 
 module.exports = router;

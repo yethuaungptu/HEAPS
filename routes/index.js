@@ -3,6 +3,8 @@ var router = express.Router();
 var User = require("../models/User");
 var University = require("../models/University");
 var Exam = require("../models/Exam");
+var Quiz = require("../models/Quiz");
+var Feedback = require("../models/Feedback");
 // const { CohereClient } = require("cohere-ai");
 // require("dotenv").config();
 
@@ -11,8 +13,12 @@ var Exam = require("../models/Exam");
 // });
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express22" });
+router.get("/", async function (req, res, next) {
+  const feedback = await Feedback.find({ rating: { $gte: 2 } })
+    .populate("user", "name")
+    .sort({ created: -1 })
+    .limit(3);
+  res.render("index", { title: "Express22", feedback: feedback });
 });
 
 router.get("/university", async function (req, res) {
@@ -31,12 +37,14 @@ router.get("/exam", async function (req, res) {
   res.render("exam", { exams: exams });
 });
 
-router.get("/quiz", function (req, res) {
-  res.render("quiz");
+router.get("/quiz", async function (req, res) {
+  const quiz = await Quiz.find({ isDelete: false });
+  res.render("quiz", { quiz: quiz });
 });
 
-router.get("/feedback", function (req, res) {
-  res.render("feedback");
+router.get("/feedback", async function (req, res) {
+  const feedbackList = await Feedback.find().populate("user");
+  res.render("feedback", { feedbackList: feedbackList });
 });
 
 router.get("/register", function (req, res) {

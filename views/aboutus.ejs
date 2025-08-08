@@ -10,7 +10,91 @@
   <body>
     <% include ./partial/navbar.ejs %>
     <!-- <div class="aos-all"> -->
-    <div class="text-3xl text-center mt-3 text-primary">About us</div>
+    <div class="max-w-5xl mx-auto p-6 bg-base-200 min-h-screen">
+      <div class="bg-base-100 shadow-lg rounded-lg p-8">
+        <h1 class="text-3xl font-bold mb-4">About Us</h1>
+        <p class="mb-4">
+          Welcome to the
+          <strong>Higher Education Access Prediction System</strong>, a platform
+          built to help students, educators, and institutions make informed
+          decisions about higher education opportunities.
+        </p>
+        <p class="mb-4">
+          Our system uses advanced data analysis and AI-powered prediction
+          models to assess students’ academic performance, strengths, and
+          readiness for higher education. By analyzing key factors, we aim to
+          bridge the gap between potential and opportunity, ensuring every
+          student gets a fair chance to succeed.
+        </p>
+
+        <!-- Mission Section -->
+        <div class="mt-8">
+          <h2 class="text-2xl font-semibold mb-2">Our Mission</h2>
+          <p>
+            We believe in creating equal access to education for all. Our
+            mission is to empower students by providing accurate insights,
+            personalized recommendations, and tools to prepare them for higher
+            education, regardless of their background.
+          </p>
+        </div>
+
+        <!-- Team Section -->
+        <div class="mt-8">
+          <h2 class="text-2xl font-semibold mb-2">Our Team</h2>
+          <p class="mb-4">
+            We are a passionate group of educators, data scientists, and
+            software developers working together to make higher education more
+            accessible.
+          </p>
+          <div class="grid md:grid-cols-2 gap-6 mt-4 item-center">
+            <!-- Example Team Member -->
+            <div class="card bg-base-200 shadow-md">
+              <div class="card-body items-center text-center">
+                <div class="avatar">
+                  <div class="w-24 rounded-full">
+                    <img
+                      src="https://avatar.iran.liara.run/public/85"
+                      alt="Team Member"
+                    />
+                  </div>
+                </div>
+                <h3 class="font-bold mt-2">Daw May Thu Kyaw</h3>
+                <p class="text-sm text-gray-500">Supervisor</p>
+              </div>
+            </div>
+            <div class="card bg-base-200 shadow-md">
+              <div class="card-body items-center text-center">
+                <div class="avatar">
+                  <div class="w-24 rounded-full">
+                    <img
+                      src="https://avatar.iran.liara.run/public/62"
+                      alt="Team Member"
+                    />
+                  </div>
+                </div>
+                <h3 class="font-bold mt-2">Ma Su Sandi Kyaw</h3>
+                <p class="text-sm text-gray-500">Developer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="mt-8">
+          <h2 class="text-2xl font-semibold mb-2">Contact Us</h2>
+          <p>
+            Have questions or suggestions? We’d love to hear from you. Reach out
+            at
+            <a
+              href="mailto:contact@higheredpredict.com"
+              class="link link-primary"
+              >contact@higheredpredict.com</a
+            >.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- </div> -->
     <% include ./partial/footer.ejs %>
   </body>

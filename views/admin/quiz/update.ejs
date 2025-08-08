@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/stylesheets/select2.min.css" rel="stylesheet" />
   </head>
   <body>
     <div id="root">
@@ -38,11 +37,12 @@
             </div>
           </div>
           <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
-            <div class="text-xl font-semibold">Exam Create</div>
+            <div class="text-xl font-semibold">Quiz Update</div>
             <div class="divider mt-2"></div>
             <div class="h-full w-full pb-6 bg-base-100">
-              <form action="/admin/exam/create" method="post">
-                <input type="hidden" id="questions" value="<%= questions %>" />
+              <form action="/admin/quiz/update" method="post">
+                <input type="hidden" name="id" value="<%= quiz._id %>" />
+                <input type="hidden" id="catVal" value="<%= quiz.category %>" />
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
                   <div class="form-control w-full undefined -mb-3">
                     <label class="label">
@@ -54,6 +54,7 @@
                     <select
                       class="select select-bordered validator w-full h-[10vh]"
                       name="category"
+                      id="category"
                       required
                       multiple
                     >
@@ -104,6 +105,7 @@
                       class="input input-bordered w-full validator"
                       required
                       minlength="3"
+                      value="<%= quiz.title %>"
                       title="Only letters, numbers or dash"
                     />
                     <p class="validator-hint">Must be at least 3 characters</p>
@@ -117,14 +119,14 @@
                     </label>
                     <input
                       type="number"
-                      name="totalMarks"
-                      id="totalMarks"
+                      name="mark"
                       readonly
                       placeholder="Marks"
                       class="input input-bordered w-full validator"
+                      value="<%= quiz.mark %>"
                       required
                       min="1"
-                      max="100"
+                      max="1000"
                       title="Only numbers"
                     />
                     <p class="validator-hint">
@@ -143,12 +145,13 @@
                       placeholder="Duration Minutes"
                       class="input input-bordered w-full validator"
                       required
+                      value="<%= quiz.durationMinutes %>"
                       min="1"
                       max="1000"
                       title="Only numbers"
                     />
                     <p class="validator-hint">
-                      Duration Minutes is required, Min 1 and Max 100
+                      Duration Minutes is required, Min 1 and Max 1000
                     </p>
                   </div>
 
@@ -162,23 +165,16 @@
                       name="description"
                       class="textarea textarea-bordered w-full"
                       placeholder="Description"
-                    ></textarea>
-                  </div>
-                  <div class="w-full h-full flex items-center justify-center">
-                    <button class="btn btn-primary" type="button" id="addBtn">
-                      Add Question
-                    </button>
+                    >
+<%= quiz.description %></textarea
+                    >
                   </div>
                 </div>
                 <div class="divider"></div>
-                <div
-                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  id="dailyTask"
-                ></div>
                 <br />
                 <div class="mt-6">
                   <button type="submit" class="btn btn-primary float-right">
-                    Add
+                    Update
                   </button>
                 </div>
               </form>
@@ -190,46 +186,9 @@
     </div>
   </body>
   <script src="/javascripts/jquery-3.7.1.min.js"></script>
-  <script src="/javascripts/select2.min.js"></script>
   <script>
     $(function () {
-      const questions = JSON.parse($("#questions").val());
-      const insertedQuestion = [];
-      var initCount = 0;
-      console.log(questions);
-      function calculateMark(idArr) {
-        const totalMark = questions
-          .filter((item) => idArr.includes(item._id.toString())) // Filter based on IDs
-          .reduce(
-            (accumulator, currentItem) => accumulator + currentItem.marks,
-            0
-          ); // Sum the 'value' property
-        $("#totalMarks").val(totalMark);
-      }
-      $("#addBtn").click(function () {
-        const data = [];
-        questions.map((item) => {
-          data.push({ id: item._id, text: item.question });
-        });
-        const divData = document.createElement("div");
-        divData.className = "border p-4 rounded bg-base-200 relative";
-        divData.setAttribute("data-day-id", initCount);
-        divData.innerHTML = `<select class="question-select w-full" name="question[${initCount}]"></select>`;
-        // document.getElementById("dailyTask").innerHTML = divData;
-        document.getElementById("dailyTask").appendChild(divData);
-
-        $(`.question-select`).select2({
-          data: data,
-        });
-
-        $(".question-select").on("change", function () {
-          var values = [];
-          $(".question-select").each(function () {
-            values.push($(this).val());
-          });
-          calculateMark(values);
-        });
-      });
+      $("#category").val($("#catVal").val().split(","));
     });
   </script>
 </html>

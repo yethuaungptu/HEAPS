@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+
+    <div class="container mx-auto px-4 py-6">
+      <!-- Exam Summary -->
+      <div class="card bg-base-100 shadow-xl mb-6">
+        <div class="card-body">
+          <h2 class="card-title text-2xl font-bold">
+            📘 Quiz: <%= history.quiz.title %>
+          </h2>
+          <p class="text-gray-600">
+            Taken by: <span class="font-semibold"><%= locals.user.name %></span>
+          </p>
+          <p class="text-gray-600">Submitted on: <%= history.created %></p>
+
+          <div
+            class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+          >
+            <div class="stat bg-base-200 rounded-lg">
+              <div class="stat-title">Score</div>
+              <div class="stat-value text-primary">
+                <%= history.answer.score %> / 1
+              </div>
+            </div>
+            <div class="stat bg-base-200 rounded-lg">
+              <div class="stat-title">Total Marks</div>
+              <div class="stat-value">
+                <%= history.answer.mark %> / <%= history.quizMark %>
+              </div>
+            </div>
+            <div class="stat bg-base-200 rounded-lg">
+              <div class="stat-title">Duration</div>
+              <div class="stat-value"><%= history.durationTaken %></div>
+            </div>
+            <div class="stat bg-base-200 rounded-lg">
+              <div class="stat-title">Status</div>
+              <div class="stat-value text-success">
+                <%= history.answer.score * 100 >= 50 ? "Passed":"Fail"%>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question List -->
+      <div class="space-y-4">
+        <!-- Example Question Card -->
+        <div
+          class="collapse collapse-arrow bg-base-100 shadow border border-gray-200"
+        >
+          <input type="checkbox" />
+          <div class="collapse-title font-medium">
+            <%= history.answer.question.question %>
+          </div>
+          <div class="collapse-content">
+            <p><strong>Your Answer:</strong> <%= history.answer.answer %></p>
+            <% if(history.answer.score > 0.7){%>
+            <p class="text-sm text-green-500">Correct</p>
+            <%}else if(history.answer.score > 0.5 && history.answer.score <=
+            0.7){%>
+            <p class="text-sm text-warning-500">Not fully Correct</p>
+            <%}else{%>
+            <p class="text-sm text-red-500">
+              Incorrect — Correct answer: <%=
+              history.answer.question.correctAnswer %>
+            </p>
+            <%}%> <% if(history.answer.remark){%>
+            <p class="text-sm text-blue-500">
+              Remark : <%= history.answer.remark %>
+            </p>
+            <%}%>
+          </div>
+        </div>
+
+        <!-- <div
+          class="collapse collapse-arrow bg-base-100 shadow border border-gray-200"
+        >
+          <input type="checkbox" />
+          <div class="collapse-title font-medium">
+            2. What is the chemical formula of water?
+          </div>
+          <div class="collapse-content">
+            <p><strong>Your Answer:</strong> H2O2 ❌</p>
+            <p class="text-sm text-red-500">Incorrect — Correct answer: H2O</p>
+          </div>
+        </div> -->
+
+        <!-- Repeat for each question -->
+      </div>
+
+      <!-- Back Button -->
+      <div class="mt-6 text-center">
+        <a href="/quiz" class="btn btn-outline btn-primary">← Back to Quiz</a>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+</html>

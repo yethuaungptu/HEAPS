@@ -13,9 +13,9 @@
     <div class="container mx-auto px-4 py-6">
       <!-- Header -->
       <div class="mb-6">
-        <h1 class="text-3xl font-bold text-primary">📘 <%= exam.title %></h1>
+        <h1 class="text-3xl font-bold text-primary">📘 <%= quiz.title %></h1>
         <p class="text-gray-500">
-          An overview of the exam information and settings
+          An overview of the quiz information and settings
         </p>
       </div>
 
@@ -25,25 +25,25 @@
           <!-- Description -->
           <div>
             <h2 class="text-lg font-semibold">📝 Description</h2>
-            <p class="text-gray-700"><%= exam.description %></p>
+            <p class="text-gray-700"><%= quiz.description %></p>
           </div>
 
           <!-- Details Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="bg-base-200 p-4 rounded">
               <span class="font-semibold">Duration:</span>
-              <p><%= exam.durationMinutes %> minutes</p>
+              <p><%= quiz.durationMinutes %> minutes</p>
             </div>
             <div class="bg-base-200 p-4 rounded">
-              <span class="font-semibold">Total Marks:</span>
-              <p><%= exam.totalMarks %></p>
+              <span class="font-semibold">Marks:</span>
+              <p><%= quiz.mark %></p>
             </div>
             <div class="bg-base-200 p-4 rounded">
               <span class="font-semibold">University:</span>
               <div class="mt-1 space-x-2">
-                <% for(var i = 0; i < exam.category.length; i++){%>
+                <% for(var i = 0; i < quiz.category.length; i++){%>
                 <span class="badge badge-primary my-1"
-                  ><%= exam.category[i] %></span
+                  ><%= quiz.category[i] %></span
                 >
                 <%}%>
               </div>
@@ -51,26 +51,20 @@
             <div class="bg-base-200 p-4 rounded">
               <span class="font-semibold">Status:</span>
               <p class="text-green-500 font-medium">
-                <%= exam.isPublished ? "Published" : "Draft" %>
+                <%= quiz.isPublished ? "Published" : "Draft" %>
               </p>
             </div>
-          </div>
-
-          <!-- Questions Count -->
-          <div class="mt-4">
-            <span class="font-semibold">Number of Questions:</span>
-            <p><%= exam.questions.length %></p>
           </div>
 
           <!-- Action Buttons (optional) -->
           <div class="mt-6 flex flex-wrap gap-2">
             <% if(isDone){%>
-            <a href="/user/exam/result/<%= exam._id %>" class="btn btn-outline"
+            <a href="/user/quiz/result/<%= quiz._id %>" class="btn btn-outline"
               >📄 View result</a
             >
             <%}else{%>
-            <a href="/user/exam/taken/<%= exam._id %>" class="btn btn-primary"
-              >✏️ Take Exam</a
+            <a href="/user/quiz/taken/<%= quiz._id %>" class="btn btn-primary"
+              >✏️ Take Quiz</a
             >
             <%}%>
           </div>

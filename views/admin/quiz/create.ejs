@@ -38,10 +38,10 @@
             </div>
           </div>
           <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
-            <div class="text-xl font-semibold">Exam Create</div>
+            <div class="text-xl font-semibold">Quiz Create</div>
             <div class="divider mt-2"></div>
             <div class="h-full w-full pb-6 bg-base-100">
-              <form action="/admin/exam/create" method="post">
+              <form action="/admin/quiz/create" method="post">
                 <input type="hidden" id="questions" value="<%= questions %>" />
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
                   <div class="form-control w-full undefined -mb-3">
@@ -117,9 +117,9 @@
                     </label>
                     <input
                       type="number"
-                      name="totalMarks"
-                      id="totalMarks"
+                      name="mark"
                       readonly
+                      id="mark"
                       placeholder="Marks"
                       class="input input-bordered w-full validator"
                       required
@@ -130,6 +130,19 @@
                     <p class="validator-hint">
                       Total Mark is required, Min 1 and Max 100
                     </p>
+                  </div>
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Question
+                      </span>
+                    </label>
+                    <div class="border p-4 rounded bg-base-200 relative">
+                      <select
+                        class="question-select w-full"
+                        name="question"
+                      ></select>
+                    </div>
                   </div>
                   <div class="form-control w-full undefined -mb-3">
                     <label class="label">
@@ -164,11 +177,12 @@
                       placeholder="Description"
                     ></textarea>
                   </div>
-                  <div class="w-full h-full flex items-center justify-center">
+
+                  <!-- <div class="w-full h-full flex items-center justify-center">
                     <button class="btn btn-primary" type="button" id="addBtn">
                       Add Question
                     </button>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="divider"></div>
                 <div
@@ -176,7 +190,7 @@
                   id="dailyTask"
                 ></div>
                 <br />
-                <div class="mt-6">
+                <div class="mt-3">
                   <button type="submit" class="btn btn-primary float-right">
                     Add
                   </button>
@@ -194,42 +208,40 @@
   <script>
     $(function () {
       const questions = JSON.parse($("#questions").val());
-      const insertedQuestion = [];
-      var initCount = 0;
-      console.log(questions);
-      function calculateMark(idArr) {
-        const totalMark = questions
-          .filter((item) => idArr.includes(item._id.toString())) // Filter based on IDs
-          .reduce(
-            (accumulator, currentItem) => accumulator + currentItem.marks,
-            0
-          ); // Sum the 'value' property
-        $("#totalMarks").val(totalMark);
-      }
-      $("#addBtn").click(function () {
-        const data = [];
-        questions.map((item) => {
-          data.push({ id: item._id, text: item.question });
-        });
-        const divData = document.createElement("div");
-        divData.className = "border p-4 rounded bg-base-200 relative";
-        divData.setAttribute("data-day-id", initCount);
-        divData.innerHTML = `<select class="question-select w-full" name="question[${initCount}]"></select>`;
-        // document.getElementById("dailyTask").innerHTML = divData;
-        document.getElementById("dailyTask").appendChild(divData);
-
-        $(`.question-select`).select2({
-          data: data,
-        });
-
-        $(".question-select").on("change", function () {
-          var values = [];
-          $(".question-select").each(function () {
-            values.push($(this).val());
-          });
-          calculateMark(values);
-        });
+      const data = [];
+      questions.map((item) => {
+        data.push({ id: item._id, text: item.question });
       });
+      $(`.question-select`).select2({
+        data: data,
+      });
+
+      $(".question-select").on("change", function () {
+        var selectedValue = $(this).val();
+        const filteredVal = questions.filter(
+          (item) => item._id.toString() == selectedValue
+        );
+        $("#mark").val(filteredVal[0].marks);
+      });
+      // const insertedQuestion = [];
+      // var initCount = 0;
+      // console.log(questions);
+      // $("#addBtn").click(function () {
+      //   const data = [];
+      //   questions.map((item) => {
+      //     data.push({ id: item._id, text: item.question });
+      //   });
+      //   const divData = document.createElement("div");
+      //   divData.className = "border p-4 rounded bg-base-200 relative";
+      //   divData.setAttribute("data-day-id", initCount);
+      //   divData.innerHTML = `<select class="question-select w-full" name="question[${initCount}]"></select>`;
+      //   // document.getElementById("dailyTask").innerHTML = divData;
+      //   document.getElementById("dailyTask").appendChild(divData);
+
+      //   $(`.question-select`).select2({
+      //     data: data,
+      //   });
+      // });
     });
   </script>
 </html>
