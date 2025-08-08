@@ -47,6 +47,24 @@ router.get("/feedback", async function (req, res) {
   res.render("feedback", { feedbackList: feedbackList });
 });
 
+router.get("/adminLogin", function (req, res) {
+  res.render("alogin");
+});
+
+router.post("/adminLogin", function (req, res) {
+  if (
+    req.body.email === "heap@admin.com" &&
+    req.body.password === "heapadmin2025"
+  ) {
+    req.session.admin = {
+      email: req.body.email,
+    };
+    res.redirect("/admin");
+  } else {
+    res.redirect("/adminLogin?error=Invalid credentials");
+  }
+});
+
 router.get("/register", function (req, res) {
   res.render("register");
 });

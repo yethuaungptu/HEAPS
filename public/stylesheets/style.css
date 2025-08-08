@@ -316,6 +316,86 @@
       outline-offset: 2px;
     }
   }
+  .tab {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+    appearance: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    webkit-user-select: none;
+    user-select: none;
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-base-content);
+      }
+    }
+    --tab-p: 1rem;
+    --tab-bg: var(--color-base-100);
+    --tab-border-color: var(--color-base-300);
+    --tab-radius-ss: 0;
+    --tab-radius-se: 0;
+    --tab-radius-es: 0;
+    --tab-radius-ee: 0;
+    --tab-order: 0;
+    --tab-radius-min: calc(0.75rem - var(--border));
+    border-color: #0000;
+    order: var(--tab-order);
+    height: var(--tab-height);
+    font-size: 0.875rem;
+    padding-inline-start: var(--tab-p);
+    padding-inline-end: var(--tab-p);
+    &:is(input[type="radio"]) {
+      min-width: fit-content;
+      &:after {
+        content: attr(aria-label);
+      }
+    }
+    &:is(label) {
+      position: relative;
+      input {
+        position: absolute;
+        inset: calc(0.25rem * 0);
+        cursor: pointer;
+        appearance: none;
+        opacity: 0%;
+      }
+    }
+    &:checked, &:is(label:has(:checked)), &:is(.tab-active, [aria-selected="true"]) {
+      & + .tab-content {
+        display: block;
+        height: calc(100% - var(--tab-height) + var(--border));
+      }
+    }
+    &:not(:checked, label:has(:checked), :hover, .tab-active, [aria-selected="true"]) {
+      color: var(--color-base-content);
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+      }
+    }
+    &:not(input):empty {
+      flex-grow: 1;
+      cursor: default;
+    }
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+      @media (forced-colors: active) {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+      }
+    }
+    &:focus-visible, &:is(label:has(:checked:focus-visible)) {
+      outline: 2px solid currentColor;
+      outline-offset: -5px;
+    }
+    &[disabled] {
+      pointer-events: none;
+      opacity: 40%;
+    }
+  }
   .menu {
     display: flex;
     width: fit-content;
@@ -869,6 +949,100 @@
   }
   .visible {
     visibility: visible;
+  }
+  .tabs-lift {
+    --tabs-height: auto;
+    --tabs-direction: row;
+    > .tab {
+      --tab-border: 0 0 var(--border) 0;
+      --tab-radius-ss: min(var(--radius-field), var(--tab-radius-min));
+      --tab-radius-se: min(var(--radius-field), var(--tab-radius-min));
+      --tab-radius-es: 0;
+      --tab-radius-ee: 0;
+      --tab-paddings: var(--border) var(--tab-p) 0 var(--tab-p);
+      --tab-border-colors: #0000 #0000 var(--tab-border-color) #0000;
+      --tab-corner-width: calc(100% + min(var(--radius-field), var(--tab-radius-min)) * 2);
+      --tab-corner-height: min(var(--radius-field), var(--tab-radius-min));
+      --tab-corner-position: top left, top right;
+      border-width: var(--tab-border);
+      border-start-start-radius: var(--tab-radius-ss);
+      border-start-end-radius: var(--tab-radius-se);
+      border-end-start-radius: var(--tab-radius-es);
+      border-end-end-radius: var(--tab-radius-ee);
+      padding: var(--tab-paddings);
+      border-color: var(--tab-border-colors);
+      &:is(.tab-active, [aria-selected="true"]):not(.tab-disabled, [disabled]), &:is(input:checked, label:has(:checked)) {
+        --tab-border: var(--border) var(--border) 0 var(--border);
+        --tab-border-colors: var(--tab-border-color) var(--tab-border-color) #0000
+        var(--tab-border-color);
+        --tab-paddings: 0 calc(var(--tab-p) - var(--border)) var(--border)
+        calc(var(--tab-p) - var(--border));
+        --tab-inset: auto auto 0 auto;
+        --tab-grad: calc(69% - var(--border));
+        --radius-start: radial-gradient(
+        circle at top left,
+        #0000 var(--tab-grad),
+        var(--tab-border-color) calc(var(--tab-grad) + 0.25px),
+        var(--tab-border-color) calc(var(--tab-grad) + var(--border)),
+        var(--tab-bg) calc(var(--tab-grad) + var(--border) + 0.25px)
+      );
+        --radius-end: radial-gradient(
+        circle at top right,
+        #0000 var(--tab-grad),
+        var(--tab-border-color) calc(var(--tab-grad) + 0.25px),
+        var(--tab-border-color) calc(var(--tab-grad) + var(--border)),
+        var(--tab-bg) calc(var(--tab-grad) + var(--border) + 0.25px)
+      );
+        background-color: var(--tab-bg);
+        &:before {
+          z-index: 1;
+          content: "";
+          display: block;
+          position: absolute;
+          width: var(--tab-corner-width);
+          height: var(--tab-corner-height);
+          background-position: var(--tab-corner-position);
+          background-image: var(--radius-start), var(--radius-end);
+          background-size: min(var(--radius-field), var(--tab-radius-min)) min(var(--radius-field), var(--tab-radius-min));
+          background-repeat: no-repeat;
+          inset: var(--tab-inset);
+        }
+        &:first-child:before {
+          --radius-start: none;
+        }
+        [dir="rtl"] &:first-child:before {
+          transform: rotateY(180deg);
+        }
+        &:last-child:before {
+          --radius-end: none;
+        }
+        [dir="rtl"] &:last-child:before {
+          transform: rotateY(180deg);
+        }
+      }
+    }
+    &:has(.tab-content) {
+      > .tab:first-child {
+        &:not(.tab-active, [aria-selected="true"]) {
+          --tab-border-colors: var(--tab-border-color) var(--tab-border-color) #0000
+          var(--tab-border-color);
+        }
+      }
+    }
+    .tab-content {
+      --tabcontent-margin: calc(-1 * var(--border)) 0 0 0;
+      --tabcontent-radius-ss: 0;
+      --tabcontent-radius-se: var(--radius-box);
+      --tabcontent-radius-es: var(--radius-box);
+      --tabcontent-radius-ee: var(--radius-box);
+    }
+    :checked, label:has(:checked), :is(.tab-active, [aria-selected="true"]) {
+      & + .tab-content {
+        &:nth-child(1), &:nth-child(n + 3) {
+          --tabcontent-radius-ss: var(--radius-box);
+        }
+      }
+    }
   }
   .list {
     display: flex;
@@ -1632,6 +1806,13 @@
     width: 100%;
     grid-auto-columns: max-content auto;
   }
+  .stats {
+    position: relative;
+    display: inline-grid;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    border-radius: var(--radius-box);
+  }
   .progress {
     position: relative;
     height: calc(0.25rem * 2);
@@ -2015,6 +2196,23 @@
   .z-30 {
     z-index: 30;
   }
+  .tab-content {
+    order: var(--tabcontent-order);
+    display: none;
+    border-color: transparent;
+    --tabcontent-radius-ss: 0;
+    --tabcontent-radius-se: 0;
+    --tabcontent-radius-es: 0;
+    --tabcontent-radius-ee: 0;
+    --tabcontent-order: 1;
+    width: 100%;
+    margin: var(--tabcontent-margin);
+    border-width: var(--border);
+    border-start-start-radius: var(--tabcontent-radius-ss);
+    border-start-end-radius: var(--tabcontent-radius-se);
+    border-end-start-radius: var(--tabcontent-radius-es);
+    border-end-end-radius: var(--tabcontent-radius-ee);
+  }
   .col-span-full {
     grid-column: 1 / -1;
   }
@@ -2158,6 +2356,15 @@
   .my-1 {
     margin-block: calc(var(--spacing) * 1);
   }
+  .my-2 {
+    margin-block: calc(var(--spacing) * 2);
+  }
+  .my-3 {
+    margin-block: calc(var(--spacing) * 3);
+  }
+  .my-5 {
+    margin-block: calc(var(--spacing) * 5);
+  }
   .my-9 {
     margin-block: calc(var(--spacing) * 9);
   }
@@ -2297,6 +2504,15 @@
     --badge-fg: var(--color-base-content);
     --size: calc(var(--size-selector, 0.25rem) * 6);
     height: var(--size);
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    --tabs-height: auto;
+    --tabs-direction: row;
+    --tab-height: calc(var(--size-field, 0.25rem) * 10);
+    height: var(--tabs-height);
+    flex-direction: var(--tabs-direction);
   }
   .navbar {
     display: flex;
@@ -2626,9 +2842,6 @@
   .w-full {
     width: 100%;
   }
-  .max-w-2xl {
-    max-width: var(--container-2xl);
-  }
   .max-w-3xl {
     max-width: var(--container-3xl);
   }
@@ -2637,9 +2850,6 @@
   }
   .max-w-5xl {
     max-width: var(--container-5xl);
-  }
-  .max-w-lg {
-    max-width: var(--container-lg);
   }
   .max-w-md {
     max-width: var(--container-md);
@@ -2681,6 +2891,17 @@
   }
   .resize {
     resize: both;
+  }
+  .stats-vertical {
+    grid-auto-flow: row;
+    overflow-y: auto;
+    .stat:not(:last-child) {
+      border-inline-end: none;
+      border-block-end: var(--border) dashed currentColor;
+      @supports (color: color-mix(in lab, red, red)) {
+        border-block-end: var(--border) dashed color-mix(in oklab, currentColor 10%, #0000);
+      }
+    }
   }
   .footer-horizontal {
     grid-auto-flow: column;
@@ -2828,6 +3049,27 @@
   }
   .border-primary {
     border-color: var(--color-primary);
+  }
+  .table-zebra {
+    tbody {
+      tr {
+        &:where(:nth-child(even)) {
+          background-color: var(--color-base-200);
+          :where(.table-pin-cols tr th) {
+            background-color: var(--color-base-200);
+          }
+        }
+        &.row-hover {
+          &, &:where(:nth-child(even)) {
+            &:hover {
+              @media (hover: hover) {
+                background-color: var(--color-base-300);
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .bg-base-100 {
     background-color: var(--color-base-100);
@@ -3280,6 +3522,11 @@
       grid-column: span 2 / span 2;
     }
   }
+  .lg\:my-9 {
+    @media (width >= 64rem) {
+      margin-block: calc(var(--spacing) * 9);
+    }
+  }
   .lg\:my-24 {
     @media (width >= 64rem) {
       margin-block: calc(var(--spacing) * 24);
@@ -3331,6 +3578,19 @@
   .lg\:w-3\/4 {
     @media (width >= 64rem) {
       width: calc(3/4 * 100%);
+    }
+  }
+  .lg\:stats-horizontal {
+    @media (width >= 64rem) {
+      grid-auto-flow: column;
+      overflow-x: auto;
+      .stat:not(:last-child) {
+        border-inline-end: var(--border) dashed currentColor;
+        @supports (color: color-mix(in lab, red, red)) {
+          border-inline-end: var(--border) dashed color-mix(in oklab, currentColor 10%, #0000);
+        }
+        border-block-end: none;
+      }
     }
   }
   .lg\:grid-cols-2 {

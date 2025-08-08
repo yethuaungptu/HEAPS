@@ -22,10 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// mongoose.connect("mongodb://127.0.0.1/heapsdb");
-mongoose.connect(
-  "mongodb+srv://heaps:heaps2025@heaps.fbkebaa.mongodb.net/?retryWrites=true&w=majority&appName=heaps"
-);
+mongoose.connect("mongodb://127.0.0.1/heapsdb");
+// mongoose.connect(
+//   "mongodb+srv://heaps:heaps2025@heaps.fbkebaa.mongodb.net/?retryWrites=true&w=majority&appName=heaps"
+// );
 const db = mongoose.connection;
 db.on("error", console.error.bind("mongodb connection error at heapsdb"));
 

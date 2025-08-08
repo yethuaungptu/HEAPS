@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html data-theme="winter">
+  <head>
+    <title>Higher Eduction Access Prediction System</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <link rel="stylesheet" href="/stylesheets/swiper-bundle.min.css" />
+    <script src="/javascripts/swiper-bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ./partial/navbar.ejs %>
+    <div class="h-screen flex items-center justify-center bg-base-200 p-1">
+      <div
+        class="card bg-base-100 w-96 card-border border-base-300 card-sm overflow-hidden"
+      >
+        <div class="border-base-300 border-b border-dashed">
+          <div class="flex items-center gap-2 p-4">
+            <div class="grow">
+              <div class="flex items-center gap-2 text-lg font-medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-5 opacity-40"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                  ></path>
+                </svg>
+                Login Admin account
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body gap-4">
+          <p class="text-sm opacity-60">Login to access admin panel</p>
+          <form action="/adminLogin" method="post" id="frm">
+            <label class="label">Email</label>
+            <input
+              type="email"
+              name="email"
+              class="input validator"
+              required
+              placeholder="Email"
+            />
+            <div class="validator-hint -my-1">Enter valid email address</div>
+            <label class="label">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="input validator"
+              placeholder="Password"
+              required
+              title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+            />
+            <p class="validator-hint -my-1">
+              Must be more than 8 characters, including at least one number,one
+              lowercase letter and one uppercase letter
+            </p>
+
+            <div class="card-actions items-center gap-6">
+              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+</html>
