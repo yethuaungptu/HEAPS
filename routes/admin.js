@@ -66,6 +66,22 @@ router.post("/feedback/delete", checkAdmin, async function (req, res, next) {
   }
 });
 
+router.get("/history/exam", checkAdmin, async function (req, res, next) {
+  const examHistory = await TakeExam.find()
+    .populate("user", "name")
+    .populate("exam", "title")
+    .sort({ created: -1 });
+  res.render("admin/examHistory", { examHistory: examHistory });
+});
+
+router.get("/history/quiz", checkAdmin, async function (req, res, next) {
+  const quizHistory = await TakeQuiz.find()
+    .populate("user", "name")
+    .populate("quiz", "title")
+    .sort({ created: -1 });
+  res.render("admin/quizHistory", { quizHistory: quizHistory });
+});
+
 router.get("/logout", checkAdmin, async function (req, res, next) {
   req.session.destroy();
   res.redirect("/");

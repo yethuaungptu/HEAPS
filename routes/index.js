@@ -43,7 +43,9 @@ router.get("/quiz", async function (req, res) {
 });
 
 router.get("/feedback", async function (req, res) {
-  const feedbackList = await Feedback.find().populate("user");
+  const feedbackList = await Feedback.find()
+    .populate("user")
+    .sort({ createdAt: -1 });
   res.render("feedback", { feedbackList: feedbackList });
 });
 
