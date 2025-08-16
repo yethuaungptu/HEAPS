@@ -33,12 +33,12 @@ router.get("/university/:id", async function (req, res) {
 });
 
 router.get("/exam", async function (req, res) {
-  const exams = await Exam.find({ isDelete: false });
+  const exams = await Exam.find({ isDelete: false }).sort({ updated: -1 });
   res.render("exam", { exams: exams });
 });
 
 router.get("/quiz", async function (req, res) {
-  const quiz = await Quiz.find({ isDeleted: false });
+  const quiz = await Quiz.find({ isDeleted: false }).sort({ updated: -1 });
   res.render("quiz", { quiz: quiz });
 });
 
