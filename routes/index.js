@@ -38,7 +38,7 @@ router.get("/exam", async function (req, res) {
 });
 
 router.get("/quiz", async function (req, res) {
-  const quiz = await Quiz.find({ isDelete: false });
+  const quiz = await Quiz.find({ isDeleted: false });
   res.render("quiz", { quiz: quiz });
 });
 

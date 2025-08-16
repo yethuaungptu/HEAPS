@@ -33,58 +33,66 @@
       >
         <input type="hidden" name="quizId" value="<%= quiz._id %>" />
         <input type="hidden" name="duration" id="durationFinal" />
-        <% if(quiz.question.type == "multiple_choice"){%>
+        <% for(var i = 0; i < randomQuestions.length;i++) { %>
+        <input
+          type="hidden"
+          name="question_<%= i %>"
+          value="<%= randomQuestions[i]._id %>"
+        />
+        <% if (randomQuestions[i].type === "multiple_choice") { %>
         <div
           class="question-block p-4 bg-white shadow-md rounded"
-          id="q1-block"
+          id="q<%= i %>-block"
         >
-          <p class="font-semibold mb-2"><%= quiz.question.question %></p>
+          <p class="font-semibold mb-2"><%= randomQuestions[i].question %></p>
           <div class="form-control flex justify-around">
-            <% for(var j = 0; j < quiz.question.choices.length;j++){%>
+            <% randomQuestions[i].choices.forEach((choice, j) => { %>
+
             <label class="label cursor-pointer">
               <input
                 type="radio"
-                name="answer"
-                value="<%= quiz.question.choices[j] %>"
+                name="answer_<%= i %>"
+                value="<%= choice %>"
                 class="radio checked:bg-blue-500"
               />
-              <span class="label-text ml-2"
-                ><%= quiz.question.choices[j] %></span
-              >
+              <span class="label-text ml-2"><%= choice %></span>
             </label>
-            <%}%>
+            <% }) %>
           </div>
         </div>
-        <%}%> <% if(quiz.question.type == "fill_in_blank"){%>
+        <% } else if (randomQuestions[i].type === "fill_in_blank") { %>
         <div
           class="question-block p-4 bg-white shadow-md rounded"
-          id="q1-block"
+          id="q<%= i %>-block"
         >
-          <p class="font-semibold mb-2"><%= quiz.question.question %></p>
+          <p class="font-semibold mb-2"><%= randomQuestions[i].question %></p>
           <input
             type="text"
-            name="answer"
+            name="answer_<%= i %>"
             placeholder="Your answer..."
             class="input input-bordered w-full"
           />
         </div>
-        <%}%> <% if(quiz.question.type == "paragraph"){%>
+        <% } else if (randomQuestions[i].type === "paragraph") { %>
         <div
           class="question-block p-4 bg-white shadow-md rounded"
-          id="q1-block"
+          id="q<%= i %>-block"
         >
-          <p class="font-semibold mb-2"><%= quiz.question.question %></p>
+          <p class="font-semibold mb-2"><%= randomQuestions[i].question %></p>
           <textarea
-            name="answer"
+            name="answer_<%= i %>"
             rows="4"
             class="textarea textarea-bordered w-full"
             placeholder="Write your answer..."
           ></textarea>
         </div>
-        <%}%>
+        <% } %> <% } %>
+
         <!-- Submit -->
         <div class="text-center">
-          <button type="submit" class="btn btn-primary">Submit Exam</button>
+          <button onclick="submitData()" type="button" class="btn btn-primary">
+            Submit Quiz
+          </button>
         </div>
       </form>
     </div>
@@ -126,7 +134,8 @@
       if (--duration < 0) {
         clearInterval(interval);
         alert("⏰ Time is up! Auto-submitting.");
-        document.getElementById("exam-form").submit();
+        submitData();
+        // document.getElementById("exam-form").submit();
       }
     }, 1000);
 
@@ -138,12 +147,37 @@
     //   // Send data to backend here
     // });
 
-    $("#exam-form").submit(function (event) {
+    // $("#exam-form").submit(function (event) {
+    //   console.log("call");
+    //   $("#durationFinal").val($("#duration").val() * 60 - duration);
+    //   event.preventDefault(); // Prevent default form submission
+    //   // alert("✅ Answers submitted!");
+    //   showNotification("success", "Answers Submitted");
+    //   var formData = $(this).serialize(); // Serialize form data
+    //   $.ajax({
+    //     url: "/user/quiz/taken",
+    //     type: "POST",
+    //     data: formData, // Send serialized data
+    //     success: function (result) {
+    //       if (result.status) {
+    //         showNotification("success", "Result is calculated");
+    //         setTimeout(() => {
+    //           location.href = "/user";
+    //         }, "2000");
+    //       } else {
+    //         showNotification("error", result.message);
+    //       }
+    //     },
+    //     error: function (error) {
+    //       console.error("Error:", error);
+    //     },
+    //   });
+    // });
+    function submitData() {
       $("#durationFinal").val($("#duration").val() * 60 - duration);
-      event.preventDefault(); // Prevent default form submission
       // alert("✅ Answers submitted!");
       showNotification("success", "Answers Submitted");
-      var formData = $(this).serialize(); // Serialize form data
+      var formData = $("#exam-form").serialize(); // Serialize form data
       $.ajax({
         url: "/user/quiz/taken",
         type: "POST",
@@ -162,6 +196,6 @@
           console.error("Error:", error);
         },
       });
-    });
+    }
   </script>
 </html>

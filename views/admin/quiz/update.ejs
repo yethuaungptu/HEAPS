@@ -120,7 +120,6 @@
                     <input
                       type="number"
                       name="mark"
-                      readonly
                       placeholder="Marks"
                       class="input input-bordered w-full validator"
                       value="<%= quiz.mark %>"
@@ -131,6 +130,28 @@
                     />
                     <p class="validator-hint">
                       Total Mark is required, Min 1 and Max 100
+                    </p>
+                  </div>
+                  <div class="form-control w-full undefined -mb-3">
+                    <label class="label">
+                      <span class="label-text text-base-content undefined">
+                        Quiz Count
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      name="quizCount"
+                      id="quizCount"
+                      value="<%= quiz.quizCount %>"
+                      placeholder="Quiz Count"
+                      class="input input-bordered w-full validator"
+                      required
+                      min="1"
+                      max="100"
+                      title="Only numbers"
+                    />
+                    <p class="validator-hint">
+                      Quiz Count is required, Min 1 and Max 100
                     </p>
                   </div>
                   <div class="form-control w-full undefined -mb-3">

@@ -8,9 +8,9 @@ const QuizSchema = new Schema({
     required: true,
   },
   description: String,
-  question: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Question",
+  quizCount: {
+    type: Number,
+    required: true,
   },
   mark: {
     type: Number,
@@ -21,7 +21,7 @@ const QuizSchema = new Schema({
     default: 30,
   },
   category: [String], // e.g. ['biology', 'midterm']
-  isDelete: {
+  isDeleted: {
     type: Boolean,
     default: false,
   },

@@ -21,19 +21,17 @@
           </p>
           <p class="text-gray-600">Submitted on: <%= history.created %></p>
 
-          <div
-            class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-          >
+          <div class="mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
             <div class="stat bg-base-200 rounded-lg">
               <div class="stat-title">Score</div>
               <div class="stat-value text-primary">
-                <%= history.answer.score %> / 1
+                <%= history.totalScore %> / <%= history.quiz.quizCount %>
               </div>
             </div>
             <div class="stat bg-base-200 rounded-lg">
               <div class="stat-title">Total Marks</div>
               <div class="stat-value">
-                <%= history.answer.mark %> / <%= history.quizMark %>
+                <%= history.totalMarks %> / <%= history.quizMark %>
               </div>
             </div>
             <div class="stat bg-base-200 rounded-lg">
@@ -43,7 +41,7 @@
             <div class="stat bg-base-200 rounded-lg">
               <div class="stat-title">Status</div>
               <div class="stat-value text-success">
-                <%= history.answer.score * 100 >= 50 ? "Passed":"Fail"%>
+                <%= history.totalScore * 100 >= 50 ? "Passed":"Fail"%>
               </div>
             </div>
           </div>
@@ -53,33 +51,36 @@
       <!-- Question List -->
       <div class="space-y-4">
         <!-- Example Question Card -->
+        <% for(var i = 0; i < history.answers.length; i++){%>
         <div
           class="collapse collapse-arrow bg-base-100 shadow border border-gray-200"
         >
           <input type="checkbox" />
           <div class="collapse-title font-medium">
-            <%= history.answer.question.question %>
+            <%= history.answers[i].question.question %>
           </div>
           <div class="collapse-content">
-            <p><strong>Your Answer:</strong> <%= history.answer.answer %></p>
-            <% if(history.answer.score > 0.7){%>
+            <p>
+              <strong>Your Answer:</strong> <%= history.answers[i].answer %>
+            </p>
+            <% if(history.answers[i].score > 0.7){%>
             <p class="text-sm text-green-500">Correct</p>
-            <%}else if(history.answer.score > 0.5 && history.answer.score <=
-            0.7){%>
+            <%}else if(history.answers[i].score > 0.5 &&
+            history.answers[i].score <= 0.7){%>
             <p class="text-sm text-warning-500">Not fully Correct</p>
             <%}else{%>
             <p class="text-sm text-red-500">
               Incorrect — Correct answer: <%=
-              history.answer.question.correctAnswer %>
+              history.answers[i].question.correctAnswer %>
             </p>
-            <%}%> <% if(history.answer.remark){%>
+            <%}%> <% if(history.answers[i].remark){%>
             <p class="text-sm text-blue-500">
-              Remark : <%= history.answer.remark %>
+              Remark : <%= history.answers[i].remark %>
             </p>
             <%}%>
           </div>
         </div>
-
+        <%}%>
         <!-- <div
           class="collapse collapse-arrow bg-base-100 shadow border border-gray-200"
         >

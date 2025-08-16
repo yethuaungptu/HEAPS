@@ -118,7 +118,6 @@
                     <input
                       type="number"
                       name="mark"
-                      readonly
                       id="mark"
                       placeholder="Marks"
                       class="input input-bordered w-full validator"
@@ -134,15 +133,23 @@
                   <div class="form-control w-full undefined -mb-3">
                     <label class="label">
                       <span class="label-text text-base-content undefined">
-                        Question
+                        Quiz Count
                       </span>
                     </label>
-                    <div class="border p-4 rounded bg-base-200 relative">
-                      <select
-                        class="question-select w-full"
-                        name="question"
-                      ></select>
-                    </div>
+                    <input
+                      type="number"
+                      name="quizCount"
+                      id="quizCount"
+                      placeholder="Quiz Count"
+                      class="input input-bordered w-full validator"
+                      required
+                      min="1"
+                      max="100"
+                      title="Only numbers"
+                    />
+                    <p class="validator-hint">
+                      Quiz Count is required, Min 1 and Max 100
+                    </p>
                   </div>
                   <div class="form-control w-full undefined -mb-3">
                     <label class="label">
@@ -203,45 +210,4 @@
       </div>
     </div>
   </body>
-  <script src="/javascripts/jquery-3.7.1.min.js"></script>
-  <script src="/javascripts/select2.min.js"></script>
-  <script>
-    $(function () {
-      const questions = JSON.parse($("#questions").val());
-      const data = [];
-      questions.map((item) => {
-        data.push({ id: item._id, text: item.question });
-      });
-      $(`.question-select`).select2({
-        data: data,
-      });
-
-      $(".question-select").on("change", function () {
-        var selectedValue = $(this).val();
-        const filteredVal = questions.filter(
-          (item) => item._id.toString() == selectedValue
-        );
-        $("#mark").val(filteredVal[0].marks);
-      });
-      // const insertedQuestion = [];
-      // var initCount = 0;
-      // console.log(questions);
-      // $("#addBtn").click(function () {
-      //   const data = [];
-      //   questions.map((item) => {
-      //     data.push({ id: item._id, text: item.question });
-      //   });
-      //   const divData = document.createElement("div");
-      //   divData.className = "border p-4 rounded bg-base-200 relative";
-      //   divData.setAttribute("data-day-id", initCount);
-      //   divData.innerHTML = `<select class="question-select w-full" name="question[${initCount}]"></select>`;
-      //   // document.getElementById("dailyTask").innerHTML = divData;
-      //   document.getElementById("dailyTask").appendChild(divData);
-
-      //   $(`.question-select`).select2({
-      //     data: data,
-      //   });
-      // });
-    });
-  </script>
 </html>

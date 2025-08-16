@@ -8,6 +8,8 @@ const TakeQuiz = require("../models/TakeQuiz");
 const Feedback = require("../models/Feedback");
 var moment = require("moment-timezone");
 const { CohereClient } = require("cohere-ai");
+const Question = require("../models/Question");
+const University = require("../models/University");
 require("dotenv").config();
 
 const cohere = new CohereClient({
@@ -29,7 +31,7 @@ Question List as array: ${questions}
 Correct Answer List as array: ${correctAnswers}
 Student Answer List as array: ${studentAnswers}
 
-Give a only score array for each value with question no and max is 1 mark for each and result like[{no:1,result:1},{no:2,result:0.7}].If result is 0, add remark for why and his answer.
+Give a only score array for each value with question no and max is 1 mark for each and result like[{no:1,result:1}].If result is 0, add remark for why and his answer.
 `;
   console.log(prompt);
   try {
@@ -80,7 +82,7 @@ router.get("/", checkUser, async function (req, res, next) {
   const recentExam = await Exam.find({ isDelete: false })
     .sort({ created: -1 })
     .limit(3);
-  const recentQuiz = await Quiz.find({ isDelete: false })
+  const recentQuiz = await Quiz.find({ isDeleted: false })
     .sort({ created: -1 })
     .limit(3);
   res.render("user/index", {
@@ -117,8 +119,17 @@ router.get("/exam/taken/:id", checkUser, async function (req, res) {
 });
 
 router.get("/quiz/taken/:id", checkUser, async function (req, res) {
-  const quiz = await Quiz.findById(req.params.id).populate("question");
-  res.render("user/answerQuiz", { quiz: quiz });
+  const quiz = await Quiz.findById(req.params.id);
+  const randomQuestions = await Question.aggregate([
+    {
+      $sample: { size: quiz.quizCount }, // Then get a random sample from the remaining
+    },
+  ]);
+  console.log(randomQuestions);
+  res.render("user/answerQuiz", {
+    quiz: quiz,
+    randomQuestions: randomQuestions,
+  });
 });
 
 router.post("/exam/taken", checkUser, async function (req, res) {
@@ -152,6 +163,7 @@ router.post("/exam/taken", checkUser, async function (req, res) {
     const answers = answerKey.map((key) => req.body[key] || "");
     console.log(markList);
     const result = await checkExam(questions, correctAnswers, answers);
+    console.log("Result", result.data);
     if (result.status) {
       const finalAnswers = [];
       let totalScore = 0;
@@ -197,30 +209,49 @@ router.post("/quiz/taken", checkUser, async function (req, res) {
       " Mins : " +
       (Number(req.body.duration) % 60) +
       " Sec";
-
-    const quizData = await Quiz.findById(req.body.quizId).populate("question");
-
+    let answerKey = [];
+    let questionKey = [];
+    let questions = [];
+    let correctAnswers = [];
+    const markList = [];
+    const quizData = await Quiz.findById(req.body.quizId);
+    for (var i = 0; i < quizData.quizCount; i++) {
+      answerKey.push("answer_" + i);
+      questionKey.push("question_" + i);
+    }
+    const answers = answerKey.map((key) => req.body[key] || "");
+    const questionIdList = questionKey.map((key) => req.body[key] || "");
+    for (var i = 0; i < quizData.quizCount; i++) {
+      const question = await Question.findById(questionIdList[i]);
+      questions.push(question.question);
+      correctAnswers.push(question.correctAnswer);
+      markList.push(question.marks);
+    }
     takeQuiz.user = req.session.user.id;
     takeQuiz.quiz = req.body.quizId;
     takeQuiz.quizMark = quizData.mark;
     takeQuiz.durationTaken = duration;
-
-    const result = await checkQuiz(
-      quizData.question.question,
-      quizData.question.correctAnswer,
-      req.body.answer
-    );
+    console.log(questions, correctAnswers, answers);
+    const result = await checkExam(questions, correctAnswers, answers);
+    console.log(result);
     if (result.status) {
-      const modRes = result.data.replace(/(\w+):/g, '"$1":');
-      const resData = JSON.parse(modRes);
-      const finalAnswer = {
-        question: quizData.question._id,
-        answer: req.body.answer,
-        score: resData.result,
-        remark: resData.remark ? resData.remark : "",
-        mark: quizData.question.marks * resData.result,
-      };
-      takeQuiz.answer = finalAnswer;
+      const finalAnswers = [];
+      let totalScore = 0;
+      let totalMarks = 0;
+      await JSON.parse(result.data).map((item, i) => {
+        totalMarks += markList[i] * item.result;
+        totalScore += item.result;
+        finalAnswers.push({
+          question: questionIdList[i],
+          answer: answers[i],
+          score: item.result,
+          remark: item.remark ? item.remark : "",
+          mark: markList[i] * item.result,
+        });
+      });
+      takeQuiz.answers = finalAnswers;
+      takeQuiz.totalScore = totalScore;
+      takeQuiz.totalMarks = totalMarks;
       await takeQuiz.save();
       await User.findByIdAndUpdate(req.session.user.id, {
         $push: {
@@ -248,7 +279,16 @@ router.get("/exam/result/:id", checkUser, async function (req, res) {
     })
       .populate("exam")
       .populate("answers.question");
-    if (history) res.render("user/examResult", { history: history });
+    const score = Math.floor(
+      (history.totalScore / history.exam.questions.length) * 100
+    );
+    const universityList = await University.find({ minScore: { $lte: score } });
+    console.log(universityList);
+    if (history)
+      res.render("user/examResult", {
+        history: history,
+        universityList: universityList,
+      });
     else res.redirect("/user");
   } catch (e) {
     res.redirect("/user");
@@ -262,7 +302,7 @@ router.get("/quiz/result/:id", checkUser, async function (req, res) {
       user: req.session.user.id,
     })
       .populate("quiz")
-      .populate("answer.question");
+      .populate("answers.question");
     if (history) res.render("user/quizResult", { history: history });
     else res.redirect("/user");
   } catch (e) {

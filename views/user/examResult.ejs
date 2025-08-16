@@ -21,13 +21,13 @@
           </p>
           <p class="text-gray-600">Submitted on: <%= history.created %></p>
 
-          <div
-            class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-          >
+          <div class="mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
             <div class="stat bg-base-200 rounded-lg">
               <div class="stat-title">Score</div>
               <div class="stat-value text-primary">
-                <%= history.totalScore %> / <%= history.exam.questions.length %>
+                <%= Math.floor(history.totalScore /
+                history.exam.questions.length * 100) %> (<%= history.totalScore
+                %> / <%= history.exam.questions.length %>)
               </div>
             </div>
             <div class="stat bg-base-200 rounded-lg">
@@ -49,6 +49,26 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="text-2xl text-center my-2">Qualified university</div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 my-2">
+        <% for(var i = 0; i < universityList.length;i++){%>
+        <div class="card bg-base-100 shadow-sm">
+          <div class="card-body">
+            <h2 class="card-title text-blue-500">
+              <%= universityList[i].name %>
+            </h2>
+            <p>Min Score : <%= universityList[i].minScore %></p>
+            <div class="card-actions justify-end">
+              <a
+                href="/university/<%= universityList[i]._id %>"
+                class="btn btn-primary"
+                >See More</a
+              >
+            </div>
+          </div>
+        </div>
+        <%}%>
       </div>
 
       <!-- Question List -->
@@ -103,7 +123,7 @@
 
       <!-- Back Button -->
       <div class="mt-6 text-center">
-        <a href="/exams" class="btn btn-outline btn-primary">← Back to Exams</a>
+        <a href="/exam" class="btn btn-outline btn-primary">← Back to Exams</a>
       </div>
     </div>
     <% include ../partial/footer.ejs %>

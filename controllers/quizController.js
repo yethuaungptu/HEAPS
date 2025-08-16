@@ -6,11 +6,11 @@ var moment = require("moment-timezone");
 
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
-  var query = { isDelete: false };
+  var query = { isDeleted: false };
   var filterValue = "";
   if (req.query.search) {
     filterValue = req.query.search;
-    query = { category: { $in: filterValue }, isDelete: false };
+    query = { category: { $in: filterValue }, isDeleted: false };
   }
   const quiz = await Quiz.find(query).sort({ created: -1 });
   res.render("admin/quiz/index", { quiz: quiz, filterValue: filterValue });
@@ -26,7 +26,7 @@ router.post("/create", async function (req, res) {
     const quiz = new Quiz();
     quiz.title = req.body.title;
     quiz.description = req.body.description;
-    quiz.question = req.body.question;
+    quiz.quizCount = req.body.quizCount;
     quiz.mark = req.body.mark;
     quiz.durationMinutes = req.body.durationMinutes;
     quiz.category = req.body.category;
@@ -39,7 +39,7 @@ router.post("/create", async function (req, res) {
 });
 
 router.get("/detail/:id", async function (req, res) {
-  const quiz = await Quiz.findById(req.params.id).populate("question");
+  const quiz = await Quiz.findById(req.params.id);
   res.render("admin/quiz/detail", { quiz: quiz });
 });
 
@@ -53,9 +53,11 @@ router.post("/update", async function (req, res) {
   try {
     const update = {
       title: req.body.title,
+      mark: req.body.mark,
       description: req.body.description,
       durationMinutes: req.body.durationMinutes,
       category: req.body.category,
+      quizCount: req.body.quizCount,
     };
 
     await Quiz.findByIdAndUpdate(req.body.id, { $set: update });

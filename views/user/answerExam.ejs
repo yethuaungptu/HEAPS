@@ -42,7 +42,9 @@
           <p class="font-semibold mb-2">
             <%= i+1 %>. <%= exam.questions[i].question %>
           </p>
-          <div class="form-control flex justify-around">
+          <div
+            class="form-control flex justify-around grid grid-cols-1 lg:grid-cols-4 gap-2"
+          >
             <% for(var j = 0; j < exam.questions[i].choices.length;j++){%>
             <label class="label cursor-pointer">
               <input
@@ -91,7 +93,14 @@
         <%}%> <%}%>
         <!-- Submit -->
         <div class="text-center">
-          <button type="submit" class="btn btn-primary">Submit Exam</button>
+          <button
+            type="button"
+            id="submitBtn"
+            onclick="submitData()"
+            class="btn btn-primary"
+          >
+            Submit Exam
+          </button>
         </div>
       </form>
     </div>
@@ -133,7 +142,7 @@
       if (--duration < 0) {
         clearInterval(interval);
         alert("⏰ Time is up! Auto-submitting.");
-        document.getElementById("exam-form").submit();
+        submitData();
       }
     }, 1000);
 
@@ -145,12 +154,38 @@
     //   // Send data to backend here
     // });
 
-    $("#exam-form").submit(function (event) {
+    // $("#exam-form").submit(function (event) {
+    //   $("#durationFinal").val($("#duration").val() * 60 - duration);
+    //   event.preventDefault(); // Prevent default form submission
+    //   // alert("✅ Answers submitted!");
+    //   showNotification("success", "Answers Submitted");
+    //   var formData = $(this).serialize(); // Serialize form data
+    //   $.ajax({
+    //     url: "/user/exam/taken",
+    //     type: "POST",
+    //     data: formData, // Send serialized data
+    //     success: function (result) {
+    //       if (result.status) {
+    //         showNotification("success", "Result is calculated");
+    //         setTimeout(() => {
+    //           location.href = "/user";
+    //         }, "2000");
+    //       } else {
+    //         showNotification("error", result.message);
+    //       }
+    //     },
+    //     error: function (error) {
+    //       console.error("Error:", error);
+    //     },
+    //   });
+    // });
+
+    function submitData() {
+      $("#submitBtn").addClass("btn-disabled");
       $("#durationFinal").val($("#duration").val() * 60 - duration);
-      event.preventDefault(); // Prevent default form submission
       // alert("✅ Answers submitted!");
       showNotification("success", "Answers Submitted");
-      var formData = $(this).serialize(); // Serialize form data
+      var formData = $("#exam-form").serialize(); // Serialize form data
       $.ajax({
         url: "/user/exam/taken",
         type: "POST",
@@ -162,13 +197,15 @@
               location.href = "/user";
             }, "2000");
           } else {
-            showNotification("error", result.message);
+            console.log(result.message);
+            $("#submitBtn").removeClass("btn-disabled");
+            showNotification("error", "AI is busy, try again");
           }
         },
         error: function (error) {
           console.error("Error:", error);
         },
       });
-    });
+    }
   </script>
 </html>

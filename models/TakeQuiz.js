@@ -13,27 +13,37 @@ const TakeQuizSchema = new Schema({
     ref: "Quiz",
     required: true,
   },
-  answer: {
-    question: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Question",
-      required: true,
+  answers: [
+    {
+      question: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Question",
+        required: true,
+      },
+      answer: {
+        type: String, // or ObjectId if options are stored as documents
+        required: true,
+      },
+      score: {
+        type: Number,
+        required: true,
+      },
+      mark: {
+        type: Number,
+        required: true,
+      },
+      remark: {
+        type: String,
+      },
     },
-    answer: {
-      type: String, // or ObjectId if options are stored as documents
-      required: true,
-    },
-    score: {
-      type: Number,
-      required: true,
-    },
-    mark: {
-      type: Number,
-      required: true,
-    },
-    remark: {
-      type: String,
-    },
+  ],
+  totalScore: {
+    type: Number,
+    required: true,
+  },
+  totalMarks: {
+    type: Number,
+    required: true,
   },
   quizMark: {
     type: Number,
