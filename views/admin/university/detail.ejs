@@ -55,7 +55,12 @@
                     <p>Ranking : <%= university.ranking %></p>
                     <p>Min Score : <%= university.minScore %></p>
                     <p>Category : <%= university.category %></p>
-                    <p>Website URL : <%= university.websiteUrl %></p>
+                    <p>
+                      Website URL :
+                      <a href="<%= university.websiteUrl %>"
+                        ><%= university.websiteUrl %></a
+                      >
+                    </p>
                     <div class="card-actions justify-end">
                       <a
                         href="/admin/university/update/<%= university._id %>"
